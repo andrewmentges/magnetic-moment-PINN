@@ -13,6 +13,9 @@ The code here was developed with the following libraries:
 * matplotlib
 * numpy
 
+
+Code for the physicis informed neural network models below can be found in `pinn_magnetic_experimental.py`. Samples of how you use the models can be seen in the jupyter notebooks found within the repository.
+
 ****
 # Simulator
 ***
@@ -29,7 +32,7 @@ be in the standard format of position value pairs of observed field measurements
 ## Methods
 `add_dipole(mlocation_x, mlocation_y, mlocation_z, mval_x, mval_y, mval_z)`
 
-Method that will generate B-Field data from the supplied dipole moment information and then add those generated fields to the internally stored B-Field data
+Method that will generate B-field data from the supplied dipole moment information and then add those generated fields to the internally stored B-field data.
 * `mlocation_x` - The X-axis position of the dipole moment to be added. Units are in meters. Value should be inside the area described by the distances.
 * `mlocation_y` - The Y-axis position of the dipole moment to be added. Units are in meters. Value should be inside the area described by the distances.
 * `mlocation_z` - The Z-axis position of the dipole moment to be added. Units are in meters. Value should be inside the area described by the distances.
@@ -39,7 +42,7 @@ Method that will generate B-Field data from the supplied dipole moment informati
 
 `plot(axis, plevels)`
 
-Method for plotting the internal B-Field for a specific axis
+Method for plotting the internal B-field for a specific axis.
 * `axis` - Axis to be plotted. Values can be "X", "Y", "Z". For example, `axis="X"`
 * `plevels` - Number of contour levels for the plot that will be generated
 
@@ -56,7 +59,7 @@ Where Position about have the format of [[ $X_{1}$, $Y_{1}$, $Z_{1}$], [ $X_{2}$
 ***
 This model is a physics informed neural network that can be used to determine the magnetic multipole moment system of an a device under test. The model
 allows the user to tweak various hyper-parameters in order to support convergence to a solution. Solved data is presented as a list of 
-position value pairs of magnetic moments. The posistions are in units of meters and the values are in units of $Amp\cdot meters^{2}$.
+position value pairs of magnetic moments. The positions are in units of meters and the values are in units of $Amp\cdot meters^{2}$.
 
 ## Constructor
 `MultiPoleModel(moments=1, lrate=.01, optimizer='adam', loss='mse', scale=1, early_stop=False, target_stop=1)`
