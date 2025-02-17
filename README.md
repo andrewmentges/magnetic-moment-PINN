@@ -7,6 +7,8 @@
 
 August 24, 2024
 
+[![DOI](https://zenodo.org/badge/925679807.svg)](https://doi.org/10.5281/zenodo.14884699)
+
 Physics informed neural network for performing magnetic dipole moment and magnetic multipole moment determination.
 The code here was developed with the following libraries:
 * Tensorflow version 2.15.0
