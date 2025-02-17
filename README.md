@@ -14,7 +14,9 @@ The code here was developed with the following libraries:
 * numpy
 
 
-Code for the physicis informed neural network models below can be found in `pinn_magnetic_experimental.py`. Samples of how you use the models can be seen in the jupyter notebooks found within the repository.
+Code for the physics informed neural network models below can be found in `pinn_magnetic_experimental.py`. Samples of how you use the models can be seen 
+in the jupyter notebooks found within the repository. This application was originally developed for spacecraft testing but can be used for any application
+that needs to determine the magnetic moment makeup of any article that can be tested.
 
 ****
 # Simulator
