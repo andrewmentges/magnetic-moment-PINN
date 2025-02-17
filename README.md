@@ -5,7 +5,13 @@
 ### By Andrew Mentges
 ### amentges@captechu.edu
 
-Physics informred neural network for performing magnetic dipole moment and magnetic multipole moment determination
+Physics informed neural network for performing magnetic dipole moment and magnetic multipole moment determination.
+The code here was developed with the following libraries:
+* Tensorflow version 2.15.0
+* Python 3.11
+* Jupyter notebooks
+* matplotlib
+* numpy
 
 ****
 # Simulator
@@ -44,3 +50,19 @@ Method for getting ordered training data. Returns a tuple of numpy arrays such t
 Where Position about have the format of [[X1, Y1, Z1], [X2, Y2, Z2],...] and BField would have the format of [[Bx1, By1, Bz1], [Bx2, By2, Bz2],...]
 
 Position will have the units of meters and Bfield values would have the units of 1 / `scale`.
+
+
+****
+# Multipole Model
+***
+This model is a physics informed neural network that can be used to determine the magnetic multipole system of an a device under test. The model
+allows the user to tweaker various hyper-parameters in order to support convergence to a solution. Solved data is presented as a list of 
+position value pairs of magnetic moments. The posistions are in units of meters and the values are in units of $Amp\cdot meters^{2}$.
+
+## Constructor
+`MultiPoleModel(moments=1, lrate=.01, optimizer='adam', loss='mse', scale=1, early_stop=False, target_stop=1)`
+* `moments` - The number of magnetic moment layers the model will use to solve for. The closer the number of moments to the actual number of moments
+  used to generate the magnetic field test data, the more accurate the model will be.
+* `lrate` - This is the learning rate of the model. This is typically on the order of 0.01. But this value can and should change depending on the optimizer chosen.
+* `optimizer` - This is the optimizer used in the training of the model. The supported optimizers are: `sgd`, `rmsprop`, `adam`, `nadam`, `adadelta`, `adagrad`.
+* `loss` - This is the loss function used in the training of the model. The supported loss functions are: `mae`, `mse`, `huber`
