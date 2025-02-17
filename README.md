@@ -81,11 +81,38 @@ Method used to train the model against collected data.
 
 `moment()`
 
-Method used print out the position value pairs of the magnetic moments that have been determined by the model after training.
+Method used print out the position value pairs of the magnetic moments that have been determined by the model after training. Positions have units of meters and values are in $Amp\cdot meters^{2}$.
+
 
 ****
 # MultiDipole Model
 ***
 This model is a physics informed neural network that can be used to determine the magnetic dipole moment of an a device under test. The model
 allows the user to tweak various hyper-parameters in order to support convergence to a solution. Solved data is presented as a list of 
-x, y, z field strengths, [ $B_{X}$, $B_{Y}$, $B_{Z}$ ]. Field strength is in units of $Amp\cdot meters^{2}$.
+x, y, z field strengths, [ $B_{X}$, $B_{Y}$, $B_{Z}$ ] centered about the origin of the test area. Field strength is in units of $Amp\cdot meters^{2}$.
+
+## Constructor
+`MultiDipoleModel(poles=1, lrate=1000, optimizer='adam', loss='mse', scale=1, early_stop=False, target_stop=1)`
+* `poles` - The number of magnetic dipole moment layers the model will use to solve for. For simple fields a value of 1 can be used. If the multipole system is
+ sufficiently complex, more dipole moment layers can be stacked on each other to develop a more accurate solution.
+* `lrate` - This is the learning rate of the model. This is typically on the order of 0.01. But this value can and should change depending on the optimizer chosen.
+* `optimizer` - This is the optimizer used in the training of the model. The supported optimizers are: `sgd`, `rmsprop`, `adam`, `nadam`, `adadelta`, `adagrad`.
+* `loss` - This is the loss function used in the training of the model. The supported loss functions are: `mae`, `mse`, `huber`.
+* `scale` - Determines the scale used for the training. A scale of 1, the input training data would have units of Tesla. For 1e9, the training data would be in the
+  units of nano-Tesla, which is typical for this type of testing. Matching the scale of the training data to the model scale is necessary for getting accurate results.
+* `early_stop` -  If a value of `True` is passed, the model will stop training the after the loss of the current epcoh of training is higher than the previous epoch.
+* `target_stop` - This can be used to stop the training of the model when a specific value of loss has been reach. For `mae` and `mse` this can be related to a specific
+  range magnetic field error in matching the average epoch loss. A standard value of 1 will give an extremely accurate solution if reached for any of the supported losses.
+
+## Methods
+`fit(positions, values, epochs)`
+
+Method used to train the model against collected data.
+* `positions` - A list `[]` of positions where the magnetic field is observed. It has units of meters and the format of [[ $X_{1}$, $Y_{1}$, $Z_{1}$], [ $X_{2}$, $Y_{2}$, $Z_{2}$],...].
+* `values` - A list `[]` of B-field values for the observed positions that should have the format of [[ $B_{X_1}$, $B_{Y_1}$, $B_{Z_1}$], [ $B_{X_2}$, $B_{Y_2}$, $B_{Z_2}$],...].
+* `epochs` - The number of times that the positions and values should be iterated over to train the model. The number could vary from 100 to 2000.
+
+`dipole()`
+
+Method used print out the value of the magnetic dipole moment that was determined by the model after training. The output is in the format of
+[ $B_{X}$, $B_{Y}$, $B_{Z}$ ] and has units of $Amp\cdot meters^{2}$.
