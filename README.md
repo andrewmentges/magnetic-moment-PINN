@@ -5,6 +5,8 @@
 ### By Andrew Mentges
 ### amentges@captechu.edu
 
+August 24, 2024
+
 Physics informed neural network for performing magnetic dipole moment and magnetic multipole moment determination.
 The code here was developed with the following libraries:
 * Tensorflow version 2.15.0
