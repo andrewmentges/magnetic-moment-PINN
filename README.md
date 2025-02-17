@@ -45,18 +45,17 @@ Method for plotting the internal B-Field for a specific axis
 
 `get_data`
 
-Method for getting ordered training data. Returns a tuple of numpy arrays such that Position, BField = `model.get_data()`
+Method for getting ordered training data. Returns a tuple of numpy arrays such that Position, B-field = `model.get_data()`
 
-Where Position about have the format of [[X1, Y1, Z1], [X2, Y2, Z2],...] and BField would have the format of [[Bx1, By1, Bz1], [Bx2, By2, Bz2],...]
-
-Position will have the units of meters and Bfield values would have the units of 1 / `scale`.
+Where Position about have the format of [[ $X_{1}$, $Y_{1}$, $Z_{1}$], [ $X_{2}$, $Y_{2}$, $Z_{2}$],...] and B-field would have the format of [[ $B_{X_1}$, $B_{Y_1}$, $B_{Z_1}$], 
+[ $B_{X_2}$, $B_{Y_2}$, $B_{Z_2}$],...] Position will have the units of meters and Bfield values would have the units of $\frac{1} {scale}$.
 
 
 ****
 # Multipole Model
 ***
-This model is a physics informed neural network that can be used to determine the magnetic multipole system of an a device under test. The model
-allows the user to tweaker various hyper-parameters in order to support convergence to a solution. Solved data is presented as a list of 
+This model is a physics informed neural network that can be used to determine the magnetic multipole moment system of an a device under test. The model
+allows the user to tweak various hyper-parameters in order to support convergence to a solution. Solved data is presented as a list of 
 position value pairs of magnetic moments. The posistions are in units of meters and the values are in units of $Amp\cdot meters^{2}$.
 
 ## Constructor
@@ -65,4 +64,28 @@ position value pairs of magnetic moments. The posistions are in units of meters 
   used to generate the magnetic field test data, the more accurate the model will be.
 * `lrate` - This is the learning rate of the model. This is typically on the order of 0.01. But this value can and should change depending on the optimizer chosen.
 * `optimizer` - This is the optimizer used in the training of the model. The supported optimizers are: `sgd`, `rmsprop`, `adam`, `nadam`, `adadelta`, `adagrad`.
-* `loss` - This is the loss function used in the training of the model. The supported loss functions are: `mae`, `mse`, `huber`
+* `loss` - This is the loss function used in the training of the model. The supported loss functions are: `mae`, `mse`, `huber`.
+* `scale` - Determines the scale used for the training. A scale of 1, the input training data would have units of Tesla. For 1e9, the training data would be in the
+  units of nano-Tesla, which is typical for this type of testing. Matching the scale of the training data to the model scale is necessary for getting accurate results.
+* `early_stop` -  If a value of `True` is passed, the model will stop training the after the loss of the current epcoh of training is higher than the previous epoch.
+* `target_stop` - This can be used to stop the training of the model when a specific value of loss has been reach. For `mae` and `mse` this can be related to a specific
+  range magnetic field error in matching the average epoch loss. A standard value of 1 will give an extremely accurate solution if reached for any of the supported losses.
+
+## Methods
+`fit(positions, values, epochs)`
+
+Method used to train the model against collected data.
+* `positions` - A list `[]` of positions where the magnetic field is observed. It has units of meters and the format of [[ $X_{1}$, $Y_{1}$, $Z_{1}$], [ $X_{2}$, $Y_{2}$, $Z_{2}$],...].
+* `values` - A list `[]` of B-field values for the observed positions that should have the format of [[ $B_{X_1}$, $B_{Y_1}$, $B_{Z_1}$], [ $B_{X_2}$, $B_{Y_2}$, $B_{Z_2}$],...].
+* `epochs` - The number of times that the positions and values should be iterated over to train the model. The number could vary from 100 to 2000.
+
+`moment()`
+
+Method used print out the position value pairs of the magnetic moments that have been determined by the model after training.
+
+****
+# MultiDipole Model
+***
+This model is a physics informed neural network that can be used to determine the magnetic dipole moment of an a device under test. The model
+allows the user to tweak various hyper-parameters in order to support convergence to a solution. Solved data is presented as a list of 
+x, y, z field strengths, [ $B_{X}$, $B_{Y}$, $B_{Z}$ ]. Field strength is in units of $Amp\cdot meters^{2}$.
