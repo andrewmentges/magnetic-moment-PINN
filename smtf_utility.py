@@ -186,26 +186,24 @@ class bf_simulator:
   # dipole moment at a specific location. Units are meters & amp-m^2
   def get_bfield(self, obs_x, obs_y, obs_z, mx, my, mz, mpos_x, mpos_y, mpos_z):
 
-    mu_0 = (4.0 * np.pi) * 10.0**(-7.0)
-    mu_denom = (4.0 * np.pi)
+    mu_0 = 1.256637061e-6
+    
+    moment = np.array([mx, my, mz])
+    moment_pos = np.array([mpos_x, mpos_y, mpos_z])
+    observer_pos = np.array([obs_x, obs_y, obs_z])
+    delta_pos = observer_pos - moment_pos
+    
+    numerator1 = ((3*delta_pos)*(np.dot(moment, delta_pos)))
+    denom1 = (np.linalg.norm(delta_pos)**5)
 
-    L = mx * (obs_x - mpos_x) + my *(obs_y - mpos_y) + mz *(obs_z - mpos_z)
-    P = np.sqrt((obs_x - mpos_x)**2 + (obs_y - mpos_y)**2 + (obs_z - mpos_z)**2)
+    denom2 = (np.linalg.norm(delta_pos)**3)
 
-    #Check for a divide by zero
-    if P == 0:
-      #set it to a super small number if it is zero
-      P = 1e-16
+    #output = (mu_0/(4*math.pi)) * (np.divide(numerator1, denom1, out=np.zeros_like(numerator1), where=denom1 !=0, casting='unsafe') - np.divide(moment,denom2, out=np.zeros_like(moment), where=denom2 !=0, casting='unsafe'))
+    output = (mu_0/(4*math.pi)) * (np.divide(numerator1, denom1, casting='unsafe') - np.divide(moment,denom2, casting='unsafe'))
 
-    Bx = (mu_0/mu_denom) * ((3*(obs_x - mpos_x))/P**5) * L - (mu_0/mu_denom) * (mx/P**3)
-    Bx = Bx * self.scale
-    By = (mu_0/mu_denom) * ((3*(obs_y - mpos_y))/P**5) * L - (mu_0/mu_denom) * (my/P**3)
-    By = By * self.scale
-    Bz = (mu_0/mu_denom) * ((3*(obs_z - mpos_z))/P**5) * L - (mu_0/mu_denom) * (mz/P**3)
-    Bz = Bz * self.scale
-
-    return [Bx, By, Bz]
-
+    
+    return output * self.scale
+    
   # Create a contour plot of the b-field that has been calculated
   def plot(self, axis='X', plevels=20):
     
