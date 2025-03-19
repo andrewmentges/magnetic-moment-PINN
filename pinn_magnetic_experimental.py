@@ -99,7 +99,8 @@ class DipoleLayer(keras.layers.Layer):
     #Define L
     l = tf.math.reduce_sum(tf.math.multiply(self.w, inputs))
     # Define base mu terms
-    mu_term = tf.constant(((4.0 * np.pi) * 10.0**(-7.0)) / (4.0 * np.pi))
+    #mu_term = tf.constant(((4.0 * np.pi) * 10.0**(-7.0)) / (4.0 * np.pi))
+    mu_term = tf.constant((1.256637061e-6) / (4.0 * np.pi))
     mu3 = tf.constant(tf.math.scalar_mul(3.0, mu_term))
     
     # Calculate the B-Field at the supplied position (inputs)
@@ -356,7 +357,8 @@ class MagneticMomentLayer(keras.layers.Layer):
     l = tf.math.reduce_sum(tf.math.multiply(self.w, delta_pos))
     #print("L: ", l)
     # Define base mu terms
-    mu_term = tf.constant(((4.0 * np.pi) * 10.0**(-7.0)) / (4.0 * np.pi))
+    #mu_term = tf.constant(((4.0 * np.pi) * 10.0**(-7.0)) / (4.0 * np.pi))
+    mu_term = tf.constant((1.256637061e-6) / (4.0 * np.pi))
     
     numerator1 = tf.math.scalar_mul(3, delta_pos)
     denom1 = tf.math.pow(p, 5.0)
